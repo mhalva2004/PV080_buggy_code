@@ -11,11 +11,19 @@ except ImportError:
 
 app = flask.Flask(__name__)
 
+ALLOWED_URLS = {
+    "google": "https://www.google.com",
+    "example": "https://example.com",
+}
+
 
 @app.route("/")
 def index():
     version = flask.request.args.get("urllib_version")
-    url = flask.request.args.get("url")
+    url_key = flask.request.args.get("url")
+    url = ALLOWED_URLS.get(url_key)
+    if url is None:
+        return "Invalid URL selection", 400
     return fetch_website(version, url)
 
         
