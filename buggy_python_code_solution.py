@@ -24,11 +24,17 @@ def print_nametag(format_string, person):
 
 
 def fetch_website(urllib_version, url):
-    # Import the requested version (2 or 3) of urllib
-    exec(f"import urllib{urllib_version} as urllib", globals())
+    # Import only supported versions (2 or 3) without dynamic code execution
+    version = str(urllib_version)
+    if version == "3":
+        import urllib3 as urllib
+    elif version == "2":
+        import urllib2 as urllib
+    else:
+        return "Unsupported urllib version"
+
     # Fetch and print the requested URL
- 
-    try: 
+    try:
         http = urllib.PoolManager()
         r = http.request('GET', url)
     except:
