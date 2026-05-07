@@ -5,12 +5,20 @@ import flask
 
 app = flask.Flask(__name__)
 
+ALLOWED_URLS = {
+    "google": "https://www.google.com",
+    "example": "https://example.com",
+}
+
 
 @app.route("/")
 def index():
     version = flask.request.args.get("urllib_version")
-    url = flask.request.args.get("url")
-    return fetch_website(version, url)
+    url_key = flask.request.args.get("url")
+    safe_url = ALLOWED_URLS.get(url_key)
+    if not safe_url:
+        return "Unsupported URL"
+    return fetch_website(version, safe_url)
 
         
 CONFIG = {"API_KEY": "771df488714111d39138eb60df756e6b"}
